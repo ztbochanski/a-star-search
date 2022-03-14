@@ -195,6 +195,40 @@ def a_star_search(world, start, goal, costs, moves, heuristic):
                     heappush(waypoint_priority_queue, waypoint)
 
 
+def pretty_print_solution(world, path, start):
+    vectors = {
+        (0, -1): "^",
+        (1, 0): ">",
+        (0, 1): "v",
+        (-1, 0): "<"
+    }
+
+    # initialize x and y values to start position
+    x = start[0]
+    y = start[1]
+
+    # set start arrow based on first move
+    for vector in vectors:
+        if vector == path[1]:
+            world[y][x] = vectors[vector]
+
+    # find and replace characters in the map
+    last_move = len(path)-1
+    count = 0
+    for move in path:
+        x = x + move[0]
+        y = y + move[1]
+        if count == last_move:
+            world[y][x] = "G"
+        else:
+            world[y][x] = vectors[move]
+        count += 1
+
+    # pretty print the array
+    for y in world:
+        print(*y, sep=' ')
+
+
 # tests
 cardinal_moves = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 costs = {'.': 1, '*': 3, '#': 5, '~': 7}
@@ -284,3 +318,6 @@ print("\nworld path: ", world_path)
 # for move in world_path:
 #     print("move ", count, ":", move)
 #     count += 1
+
+pretty_print_solution(test_world, test_path, (0, 0))
+pretty_print_solution(full_world, world_path, (0, 0))
